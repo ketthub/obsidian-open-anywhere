@@ -5,7 +5,7 @@
 -- app bundle at Contents/Resources/.
 --
 -- Part of: obsidian-open-anywhere
--- https://github.com/Kt-L/obsidian-open-anywhere
+-- https://github.com/ketthub/obsidian-open-anywhere
 
 on run
 	display dialog "Drop .md files onto this app, or set it as the default app for .md files in Finder (Get Info → Open with → Change All)." buttons {"OK"} default button "OK" with title "Obsidian Open Anywhere"

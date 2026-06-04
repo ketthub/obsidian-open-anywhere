@@ -6,7 +6,7 @@
 # resolved by appending a timestamp suffix.
 #
 # Part of: obsidian-open-anywhere
-# https://github.com/Kt-L/obsidian-open-anywhere
+# https://github.com/ketthub/obsidian-open-anywhere
 #
 # Usage:
 #   open-in-obsidian.sh /path/to/file1.md [/path/to/file2.md ...]

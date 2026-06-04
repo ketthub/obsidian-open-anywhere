@@ -44,7 +44,7 @@ Obsidian 只能打开 Vault 里的文件。如果你双击 Mac 上别处的某�
 ## 安装
 
 ```bash
-git clone https://github.com/Kt-L/obsidian-open-anywhere.git
+git clone https://github.com/ketthub/obsidian-open-anywhere.git
 cd obsidian-open-anywhere
 
 # 1. 创建你自己的配置

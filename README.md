@@ -44,7 +44,7 @@ If `Inbox/some-paper.md` already exists, the new copy becomes `some-paper-2026-0
 ## Install
 
 ```bash
-git clone https://github.com/Kt-L/obsidian-open-anywhere.git
+git clone https://github.com/ketthub/obsidian-open-anywhere.git
 cd obsidian-open-anywhere
 
 # 1. Create your config
