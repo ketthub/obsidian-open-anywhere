@@ -9,9 +9,9 @@
 
 ## The problem
 
-Obsidian only opens notes that live inside a Vault. If you double-click a markdown file anywhere else on your Mac — a download, an export from another tool, a `README.md` in a code repo — Obsidian either ignores it or refuses to open it properly. You lose backlinks, graph view, plugins, search, everything.
+Obsidian only opens notes that live inside a Vault. Double-click a markdown file anywhere else on your Mac — a download, an export from another tool, a `README.md` in a code repo — and Obsidian simply does nothing.
 
-The official answer is "move it into your Vault first". That's exactly the friction this tool removes.
+The workaround is "move the file into your Vault first, then open it from there". This tool does that for you on every double-click.
 
 ## What this does
 
@@ -109,7 +109,7 @@ Removes the `.app` and unregisters it. Your config, log file, and any files alre
 ## FAQ
 
 **Q: Why not just set Obsidian itself as the default `.md` app?**
-A: Try it. Double-clicking an external `.md` either does nothing useful, opens a broken view without backlinks, or shows an error — Obsidian can only render notes that live inside a Vault.
+A: Try it. Double-clicking an external `.md` does nothing — Obsidian only opens files that live inside a Vault.
 
 **Q: Does this duplicate every markdown file I ever open?**
 A: Yes, by design — that's how the file ends up inside your Vault and gets indexed. The duplicates land in one folder (`Inbox/` by default) so you can review and decide where they belong (or just bulk-delete). Original files outside the Vault are never touched.

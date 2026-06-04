@@ -9,9 +9,9 @@
 
 ## 这工具解决什么问题
 
-Obsidian 只能打开 Vault 里的文件。如果你双击 Mac 上别处的某个 `.md`（下载的、其他工具导出的、代码仓库里的 README），Obsidian 要么完全不响应，要么打开但功能残缺——没有反向链接，没有图谱，没有插件，连搜索都进不去。
+Obsidian 只能打开 Vault 里的文件。你在 Mac 上双击别处的 `.md`（下载的、其他工具导出的、代码仓库里的 README），Obsidian 完全没反应。
 
-官方建议是"先手动把文件挪进 Vault"。`obsidian-open-anywhere` 就是把这个挪动做成自动的。
+绕过的办法是"先手动把文件挪进 Vault，再从 Vault 里打开它"。这个工具就是把这一步在你每次双击时自动做掉。
 
 ## 工具做了什么
 
@@ -109,7 +109,7 @@ cp config.sh.example config.sh
 ## FAQ
 
 **Q：为什么不直接把 Obsidian 设为 `.md` 的默认打开方式？**
-A：可以试试。双击外部 `.md` 时 Obsidian 要么没反应，要么打开但反向链接全失效，要么直接报错——Obsidian 只能正常处理 Vault 内的文件。
+A：可以试试。Obsidian 完全没反应——它只打开 Vault 内的文件。
 
 **Q：这会把我打开过的所有 markdown 都复制一份吗？**
 A：会，这就是设计目的——只有文件在 Vault 内 Obsidian 才能正常索引。所有副本都集中在一个文件夹（默认 `Inbox/`），方便你后续整理或批量删除。Vault 外的原文件不会被动。
