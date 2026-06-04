@@ -1,0 +1,18 @@
+# User's personal config (each user creates their own from config.sh.example)
+config.sh
+
+# Build artifacts
+build/
+*.app
+
+# macOS metadata
+.DS_Store
+._*
+
+# Logs
+*.log
+
+# Editor
+.idea/
+.vscode/
+*.swp
