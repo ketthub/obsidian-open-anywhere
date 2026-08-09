@@ -1,7 +1,7 @@
 # Obsidian Open Anywhere
 
-> **在 macOS 上，双击任何 `.md` 文件都自动用 Obsidian 打开，哪怕文件不在 Vault 里。**
-> 零依赖 · 一个 shell 脚本 + 一个极小的 `.app`。
+> **在 macOS 和 Windows 上，双击任何 `.md` 文件都自动用 Obsidian 打开，哪怕文件不在 Vault 里。**
+> 零依赖 · 一个 shell 脚本 + 一个极小的 `.app`（macOS）· 纯 Python 移植版（Windows）。
 
 [English README →](./README.md)
 
@@ -89,6 +89,42 @@ cp config.sh.example config.sh
 
 改完 `config.sh` 后需要重新运行 `./install.sh`，让新配置打包进 .app。
 
+## Windows
+
+与 macOS 版并行的纯 Python 移植版，行为一致（复制进收件箱 + `obsidian://open`），并多一个改进：**已经在 Vault 内**的文件直接打开，不会重复复制。
+
+### 系统要求（Windows）
+
+- Windows 10/11，已安装 Python 3（需要 `pythonw.exe` 在 PATH 里）
+- 已安装 [Obsidian](https://obsidian.md/)，至少有一个 Vault
+
+### 安装（Windows）
+
+```bat
+git clone https://github.com/ketthub/obsidian-open-anywhere.git
+cd obsidian-open-anywhere
+
+rem 1. 创建配置（然后编辑 config.ini，把 vault_path 改成你的 Vault 路径）
+copy config.example.ini config.ini
+
+rem 2. 注册 .md 处理（只写 HKCU，不需要管理员）
+install.bat
+```
+
+涉及的文件：
+
+- **`src/open-in-obsidian.py`** — 移植版本体；配置从 `config.ini` 读取（键名与 `config.sh` 一致，放在 `[obsidian]` 段下）。
+- **`install.bat`** — 把脚本和配置复制到 `%LOCALAPPDATA%\obsidian-open-anywhere\`，并注册 `.md` 文件关联。
+- **`uninstall.bat`** — 移除 `.md` 关联（已安装的文件会保留）。
+
+Windows 注意事项：
+
+- 只注册 `.md` 一种扩展名（`.markdown` / `.txt` 仅在手动调用脚本时接受）——刻意保守，避免劫持普通文本文件。
+- `install.bat` 会删除 Win11 24H2+ 的 `UserChoiceLatest` 注册表键，否则它会覆盖自定义关联。
+- 同名冲突加 `YYYY-MM-DD-HHMM` 时间戳后缀（还不够就再加数字）；原文件永远不会被移动或修改。
+- 日志：`%LOCALAPPDATA%\obsidian-open-anywhere\obsidian-open-anywhere.log`。
+- 改完 `config.ini` 无需重装——脚本每次启动都会读取它。
+
 ## 工作原理
 
 整个工具只有两个文件：
@@ -118,7 +154,7 @@ A：会，这就是设计目的——只有文件在 Vault 内 Obsidian 才能�
 A：默认不行（太容易丢东西）。如果你确定想要移动语义，把 `src/open-in-obsidian.sh` 里的 `cp -p` 改成 `mv`，然后重跑 `./install.sh`。
 
 **Q：Linux / Windows 上能用吗？**
-A：这套实现只支持 macOS（依赖 AppleScript + LaunchServices）。shell 脚本本身是可移植的，Linux 可以包装成 `.desktop` 文件（`MimeType=text/markdown`），Windows 可以用注册表 + `.bat`。欢迎 PR。
+A：Windows 已通过纯 Python 移植版支持（见上方 Windows 章节）。Linux 还没实现——shell 脚本本身可移植，用 `.desktop` 包装（`MimeType=text/markdown`）应该就能跑。欢迎 PR。
 
 **Q：能支持多 Vault 吗？**
 A：当前一次只指向一个 Vault（`config.sh` 里那个）。如果要多 Vault，需要 fork 出几份独立的 .app，每个用不同的 bundle identifier——没做成内置功能，但 fork 一份很容易改。
@@ -132,6 +168,7 @@ A：会（`cp -p`）。
 ## 排错
 
 - **双击没反应** → 看 `~/Library/Logs/obsidian-open-anywhere.log`。最常见的原因是 `VAULT_PATH` 指向了一个不存在的路径
+- **双击没反应（Windows）** → 看 `%LOCALAPPDATA%\obsidian-open-anywhere\obsidian-open-anywhere.log`。最常见原因：`config.ini` 里的 `vault_path` 不存在，或者你在「设置 → 默认应用」里重选过 `.md` 的默认程序导致 `UserChoiceLatest` 复活（重跑一次 `install.bat` 即可清除）
 - **打开了错误的 vault** → 在 `config.sh` 里显式设置 `VAULT_NAME`，名字要和 Obsidian 自己的 vault 切换器里显示的一致
 - **被 Gatekeeper 拦** → 系统设置 → 隐私与安全性 → "仍要打开"，只需一次
 - **"打开方式"菜单里看不到这个 app** → 重跑一遍 `./install.sh`，会强制 `lsregister -f` 刷新一次
