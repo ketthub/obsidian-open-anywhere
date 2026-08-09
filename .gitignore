@@ -1,6 +1,9 @@
 # User's personal config (each user creates their own from config.sh.example)
 config.sh
 
+# Windows: personal config (each user creates their own from config.example.ini)
+config.ini
+
 # Build artifacts
 build/
 *.app

@@ -1,7 +1,7 @@
 # Obsidian Open Anywhere
 
 > **Open any external `.md` file in Obsidian by double-clicking it — even if the file lives outside your Vault.**
-> macOS · zero dependencies · one shell script + one tiny `.app`.
+> macOS & Windows · zero dependencies · one shell script + one tiny `.app` (macOS) · pure-Python port (Windows).
 
 [简体中文 README →](./README.zh.md)
 
@@ -89,6 +89,42 @@ All settings live in `config.sh` (copied from `config.sh.example`):
 
 After editing `config.sh`, re-run `./install.sh` to push the new config into the app bundle.
 
+## Windows
+
+A pure-Python port runs alongside the macOS app. It provides the same copy-to-inbox + `obsidian://open` behavior on Windows, plus one improvement: files **already inside** the vault are opened directly instead of being copied again.
+
+### Requirements (Windows)
+
+- Windows 10/11, Python 3 installed (needs `pythonw.exe` on PATH)
+- [Obsidian](https://obsidian.md/) with at least one Vault
+
+### Install (Windows)
+
+```bat
+git clone https://github.com/ketthub/obsidian-open-anywhere.git
+cd obsidian-open-anywhere
+
+rem 1. Create your config (then edit config.ini and set vault_path)
+copy config.example.ini config.ini
+
+rem 2. Register .md handling (HKCU only, no admin needed)
+install.bat
+```
+
+Files:
+
+- **`src/open-in-obsidian.py`** — the port; configuration is read from `config.ini` (same keys as `config.sh`, under a `[obsidian]` section).
+- **`install.bat`** — copies the script + config into `%LOCALAPPDATA%\obsidian-open-anywhere\` and registers `.md` files.
+- **`uninstall.bat`** — removes the `.md` association (installed files are kept).
+
+Windows notes:
+
+- Only `.md` is registered as a handled extension (`.markdown` / `.txt` are accepted only for manual invocations) — deliberately conservative so plain text files are never hijacked.
+- `install.bat` deletes the Win11 24H2+ `UserChoiceLatest` registry key for `.md`, which would otherwise override the custom association.
+- Collisions get a `YYYY-MM-DD-HHMM` timestamp suffix (numeric suffix if needed); the original file is never moved or modified.
+- Log: `%LOCALAPPDATA%\obsidian-open-anywhere\obsidian-open-anywhere.log`.
+- After editing `config.ini`, no re-install is needed — the script reads it at every launch.
+
 ## How it works
 
 The whole thing is two files:
@@ -118,7 +154,7 @@ A: Yes, by design — that's how the file ends up inside your Vault and gets ind
 A: Not by default (too easy to lose work). If you want move-instead-of-copy, change `cp -p` to `mv` in `src/open-in-obsidian.sh` and re-run `./install.sh`.
 
 **Q: What about Linux / Windows?**
-A: This implementation is macOS-only (uses AppleScript + LaunchServices). The shell script alone is portable — you could wrap it differently on Linux (`.desktop` file with `MimeType=text/markdown`) or Windows (registry / `.bat`). PRs welcome.
+A: Windows is supported via the Python port (see the Windows section above). Linux is not implemented yet — the shell script is portable, so a `.desktop` wrapper (`MimeType=text/markdown`) should work. PRs welcome.
 
 **Q: Does this work with multi-vault setups?**
 A: It points at one vault at a time (the one in `config.sh`). For multiple vaults you'd need separate `.app` instances with different bundle identifiers — not built-in, but easy to fork.
@@ -132,6 +168,7 @@ A: Yes (`cp -p`).
 ## Troubleshooting
 
 - **Nothing happens on double-click** — check `~/Library/Logs/obsidian-open-anywhere.log`. The most common cause is `VAULT_PATH` pointing to a path that doesn't exist.
+- **Nothing happens on double-click (Windows)** — check `%LOCALAPPDATA%\obsidian-open-anywhere\obsidian-open-anywhere.log`. Most common causes: `vault_path` in `config.ini` doesn't exist, or `UserChoiceLatest` came back after re-picking a default `.md` app in Settings → Default apps (re-run `install.bat` to remove it).
 - **Wrong vault opens** — set `VAULT_NAME` explicitly in `config.sh` to match the name Obsidian shows in its vault switcher.
 - **Gatekeeper blocks the app** — System Settings → Privacy & Security → "Open Anyway". Once-only.
 - **"Open With" menu doesn't show the app** — run `./install.sh` again; it forces an `lsregister -f` refresh.
