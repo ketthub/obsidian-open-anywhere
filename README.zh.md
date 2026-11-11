@@ -1,5 +1,8 @@
 # Obsidian Open Anywhere
 
+> [!IMPORTANT]
+> **本项目已归档。** Obsidian 现已原生支持打开 Vault 之外的外部 `.md` 文件，这个变通方案不再需要。仓库保留为只读，仅供参考。
+
 > **在 macOS 上，双击任何 `.md` 文件都自动用 Obsidian 打开，哪怕文件不在 Vault 里。**
 > 零依赖 · 一个 shell 脚本 + 一个极小的 `.app`。
 

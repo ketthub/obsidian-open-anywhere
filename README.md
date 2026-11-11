@@ -1,5 +1,8 @@
 # Obsidian Open Anywhere
 
+> [!IMPORTANT]
+> **This project is archived.** Obsidian now natively supports opening external `.md` files that live outside a Vault, so this workaround is no longer needed. The repository is kept read-only for reference.
+
 > **Open any external `.md` file in Obsidian by double-clicking it — even if the file lives outside your Vault.**
 > macOS · zero dependencies · one shell script + one tiny `.app`.
 
